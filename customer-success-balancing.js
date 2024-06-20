@@ -14,31 +14,36 @@ function customerSuccessBalancing(
    * =========== Write your solution here ==========
    * ===============================================
    */
-
   const customerSuccessAvailable = customerSuccess.filter(item => !customerSuccessAway.includes(item.id));
   const customerSuccessSortedByScore = customerSuccessAvailable.sort(function (a, b) {
     return a.score - b.score
-  })
+  });
   const countCustomers = (customers, scoreMin, scoreMax) => {
-    return customers.filter(customer => customer.score > scoreMin && customer.score <= scoreMax).length;
-  }
+    let count = 0;
+    const listSize = customers.length;
+    for (let i = 0;  i < listSize; i++){
+      if (customers[i].score > scoreMin && customers[i].score <= scoreMax){
+        count++
+      }
+    }
+    return count;
+  };
   let minScore = 0;
-  let customersForCs = [];
-  for(let i = 0 ; i < customerSuccessSortedByScore.length ; i++) {
+  let customersByCs = [];
+  const listSize = customerSuccessSortedByScore.length;
+  for(let i = 0;  i < listSize; i++) {
   	const currentCs = customerSuccessSortedByScore[i];
-    const currentCsCount = countCustomers(customers, minScore, currentCs.score)
-    customersForCs.push({id: currentCs.id, count: currentCsCount })
-    minScore = currentCs.score
+    const currentCsCount = countCustomers(customers, minScore, currentCs.score);
+    customersByCs.push({ id: currentCs.id, count: currentCsCount });
+    minScore = currentCs.score;
   }
-  const customerSuccessSortedByNumberOfCustomers = customersForCs.sort(function (a, b) {
+  const customerSuccessSortedByNumberOfCustomers = customersByCs.sort(function (a, b) {
     return b.count - a.count
-  })
-
+  });
   if(customerSuccessSortedByNumberOfCustomers[0].count === customerSuccessSortedByNumberOfCustomers[1].count){
-    return 0
-  }
-  else {
-    return customerSuccessSortedByNumberOfCustomers[0].id
+    return 0;
+  } else {
+    return customerSuccessSortedByNumberOfCustomers[0].id;
   }
 }
 
