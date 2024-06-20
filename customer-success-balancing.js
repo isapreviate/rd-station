@@ -19,19 +19,27 @@ function customerSuccessBalancing(
   const customerSuccessSortedByScore = customerSuccessAvailable.sort(function (a, b) {
     return a.score - b.score
   })
-  const forCssOne = customers.filter(customer => customer.score <= customerSuccessSortedByScore[0].score)
-  const newList = customers.filter(item => !forCssOne.includes(item));
-  const forCssTwo = newList.filter(customer => customer.score <= customerSuccessSortedByScore[1].score)
-  const newList2 = newList.filter(item => !forCssTwo.includes(item));
-  const one = forCssOne.length;
-  const two = forCssTwo.length;
-  const customersForCs = [];
-  customersForCs.push({id: 1, customers: one})
-  customersForCs.push({id: 2, customers: two})
-  const customerSuccessSortedByNumber = customersForCs.sort(function (a, b) {
-    return a.score - b.score
+  const countCustomers = (customers, scoreMin, scoreMax) => {
+    return customers.filter(customer => customer.score > scoreMin && customer.score <= scoreMax).length;
+  }
+  let minScore = 0;
+  let customersForCs = [];
+  for(let i = 0 ; i < customerSuccessSortedByScore.length ; i++) {
+  	const currentCs = customerSuccessSortedByScore[i];
+    const currentCsCount = countCustomers(customers, minScore, currentCs.score)
+    customersForCs.push({id: currentCs.id, count: currentCsCount })
+    minScore = currentCs.score
+  }
+  const customerSuccessSortedByNumberOfCustomers = customersForCs.sort(function (a, b) {
+    return b.count - a.count
   })
-  customerSuccessSortedByNumber[0].id
+
+  if(customerSuccessSortedByNumberOfCustomers[0].count === customerSuccessSortedByNumberOfCustomers[1].count){
+    return 0
+  }
+  else {
+    return customerSuccessSortedByNumberOfCustomers[0].id
+  }
 }
 
 test("Scenario 1", () => {
