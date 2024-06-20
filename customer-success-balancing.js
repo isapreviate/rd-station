@@ -15,9 +15,7 @@ function customerSuccessBalancing(
    * ===============================================
    */
   const customerSuccessAvailable = customerSuccess.filter(item => !customerSuccessAway.includes(item.id));
-  const customerSuccessSortedByScore = customerSuccessAvailable.sort(function (a, b) {
-    return a.score - b.score
-  });
+  const cssSortedByScore = customerSuccessAvailable.sort(function (a, b) { return a.score - b.score });
   const countCustomers = (customers, scoreMin, scoreMax) => {
     let count = 0;
     const listSize = customers.length;
@@ -30,20 +28,18 @@ function customerSuccessBalancing(
   };
   let minScore = 0;
   let customersByCs = [];
-  const listSize = customerSuccessSortedByScore.length;
+  const listSize = cssSortedByScore.length;
   for(let i = 0;  i < listSize; i++) {
-  	const currentCs = customerSuccessSortedByScore[i];
+  	const currentCs = cssSortedByScore[i];
     const currentCsCount = countCustomers(customers, minScore, currentCs.score);
     customersByCs.push({ id: currentCs.id, count: currentCsCount });
     minScore = currentCs.score;
   }
-  const customerSuccessSortedByNumberOfCustomers = customersByCs.sort(function (a, b) {
-    return b.count - a.count
-  });
-  if(customerSuccessSortedByNumberOfCustomers[0].count === customerSuccessSortedByNumberOfCustomers[1].count){
+  const cssSortedByNumberOfCustomers = customersByCs.sort(function (a, b) { return b.count - a.count });
+  if(cssSortedByNumberOfCustomers[0].count === cssSortedByNumberOfCustomers[1].count){
     return 0;
   } else {
-    return customerSuccessSortedByNumberOfCustomers[0].id;
+    return cssSortedByNumberOfCustomers[0].id;
   }
 }
 
